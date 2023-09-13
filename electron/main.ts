@@ -23,7 +23,7 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      webSecurity: false,
+      webSecurity: false
     },
   })
 
@@ -82,12 +82,21 @@ function createTrayWindow(tray: Tray) {
     resizable: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      webSecurity: false,
+      webSecurity: false
     }
   });
 
+  trayWindow.openDevTools({mode: 'detach'})
+
+  console.log(VITE_DEV_SERVER_URL)
+
   // and load the index.html of the app.
-  trayWindow.loadFile(path.join(__dirname, "../index.html"));
+  if (VITE_DEV_SERVER_URL) {
+    trayWindow.loadURL(VITE_DEV_SERVER_URL + 'tray')
+  } else {
+    // win.loadFile('dist/index.html')
+    trayWindow.loadFile(path.join(process.env.DIST, 'index.html'))
+  }
 
   const position = getWindowPosition(trayWindow, tray);
 
@@ -95,16 +104,30 @@ function createTrayWindow(tray: Tray) {
   trayWindow.show();
   trayWindow.focus();
 
+  return trayWindow;
   // Open the DevTools.
   //trayWindow.webContents.openDevTools();
 }
 
 function createTray() {
   const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon_16x16@2x.png'))
+  let trayWindow = undefined;
 
   tray.on('click', () => {
-    createTrayWindow(tray);
+    if (!trayWindow) {
+      trayWindow = createTrayWindow(tray);
+    } else {
+      toggleWindow(trayWindow);
+    }
   })
+}
+
+function toggleWindow(window: BrowserWindow) {
+  if (window.isVisible()) {
+    window.hide()
+  } else {
+    window.show()
+  }
 }
 
 const initOrderNotifications = () => {
