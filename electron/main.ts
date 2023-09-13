@@ -98,16 +98,30 @@ function createTrayWindow(tray: Tray) {
   trayWindow.show();
   trayWindow.focus();
 
+  return trayWindow;
   // Open the DevTools.
   //trayWindow.webContents.openDevTools();
 }
 
 function createTray() {
   const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon_16x16@2x.png'))
+  let trayWindow = undefined;
 
   tray.on('click', () => {
-    createTrayWindow(tray);
+    if (!trayWindow) {
+      trayWindow = createTrayWindow(tray);
+    } else {
+      toggleWindow(trayWindow);
+    }
   })
+}
+
+function toggleWindow(window: BrowserWindow) {
+  if (window.isVisible()) {
+    window.hide()
+  } else {
+    window.show()
+  }
 }
 
 app.whenReady().then(() => {
