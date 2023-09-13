@@ -23,6 +23,7 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false
     },
   })
 
@@ -81,6 +82,7 @@ function createTrayWindow(tray: Tray) {
     resizable: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      webSecurity: false
     }
   });
 
