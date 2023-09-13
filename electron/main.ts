@@ -86,9 +86,9 @@ function createTrayWindow(tray: Tray) {
     }
   });
 
-  trayWindow.openDevTools({mode: 'detach'})
+  //trayWindow.openDevTools({mode: 'detach'})
 
-  console.log(VITE_DEV_SERVER_URL)
+  //console.log(VITE_DEV_SERVER_URL)
 
   // and load the index.html of the app.
   if (VITE_DEV_SERVER_URL) {
