@@ -2,7 +2,7 @@
   "name": "spryker-desktop",
   "version": "0.0.1-alpha",
   "description": "N/A",
-  "main": "main.js",
+  "main": "dist-electron/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/spryker-community/spryker-desktop.git"
@@ -12,14 +12,25 @@
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "amqplib": "^0.10.3",
+    "dotenv": "^16.3.1",
     "electron": "^26.2.1",
+    "electron-builder": "^24.6.4",
     "eslint": "^8.49.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vite-plugin-electron": "^0.14.1",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "vite-plugin-static-copy": "^0.17.0"
   },
   "scripts": {
     "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "build": "tsc",
+    "build": "tsc && vite build && electron-builder",
     "watch": "tsc -w",
-    "start": "npm run build && electron ./dist/main.js"
+    "start": "npm run build && electron ./dist/main.js",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@spryker-oryx/presets": "^1.0.1",
+    "@spryker-oryx/themes": "^1.0.1"
   }
 }
