@@ -85,7 +85,12 @@ function createTrayWindow(tray: Tray) {
   });
 
   // and load the index.html of the app.
-  trayWindow.loadFile(path.join(__dirname, "../index.html"));
+  if (VITE_DEV_SERVER_URL) {
+    trayWindow.loadURL(VITE_DEV_SERVER_URL)
+  } else {
+    // win.loadFile('dist/index.html')
+    trayWindow.loadFile(path.join(process.env.DIST, 'index.html'))
+  }
 
   const position = getWindowPosition(trayWindow, tray);
 
