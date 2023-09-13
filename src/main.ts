@@ -1,5 +1,7 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Tray } from "electron";
 import * as path from "path";
+
+const assetsDirectory = path.join(__dirname, '../assets');
 
 function createWindow() {
     // Create the browser window.
@@ -9,7 +11,7 @@ function createWindow() {
             preload: path.join(__dirname, "preload.js"),
         },
         width: 800,
-        icon: '/public/icon.png'
+        icon: path.join(assetsDirectory, 'icon.png')
     });
 
     // and load the index.html of the app.
@@ -19,11 +21,60 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 }
 
+function getWindowPosition(window: BrowserWindow, tray: Tray) {
+    const windowBounds = window.getBounds()
+    const trayBounds = tray.getBounds()
+
+    // Center window horizontally below the tray icon
+    const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
+
+    // Position window 4 pixels vertically below the tray icon
+    const y = Math.round(trayBounds.y + trayBounds.height + 4)
+
+    return {x: x, y: y}
+}
+
+function createTrayWindow(tray: Tray) {
+    // Create the browser window.
+    const trayWindow = new BrowserWindow({
+        width: 300,
+        height: 450,
+        show: false,
+        frame: false,
+        fullscreenable: false,
+        resizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+        }
+    });
+
+    // and load the index.html of the app.
+    trayWindow.loadFile(path.join(__dirname, "../index.html"));
+
+    const position = getWindowPosition(trayWindow, tray);
+
+    trayWindow.setPosition(position.x, position.y, false);
+    trayWindow.show();
+    trayWindow.focus();
+
+    // Open the DevTools.
+    //trayWindow.webContents.openDevTools();
+}
+
+function createTray() {
+    const tray = new Tray(path.join(assetsDirectory, 'icon_16x16@2x.png'))
+
+    tray.on('click', function (event) {
+        createTrayWindow(tray);
+    })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     createWindow();
+    createTray();
 
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the
