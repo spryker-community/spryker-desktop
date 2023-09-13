@@ -84,9 +84,13 @@ function createTrayWindow(tray: Tray) {
     }
   });
 
+  trayWindow.openDevTools({mode: 'detach'})
+
+  console.log(VITE_DEV_SERVER_URL)
+
   // and load the index.html of the app.
   if (VITE_DEV_SERVER_URL) {
-    trayWindow.loadURL(VITE_DEV_SERVER_URL)
+    trayWindow.loadURL(VITE_DEV_SERVER_URL + 'tray')
   } else {
     // win.loadFile('dist/index.html')
     trayWindow.loadFile(path.join(process.env.DIST, 'index.html'))
