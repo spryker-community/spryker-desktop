@@ -24,10 +24,9 @@
   },
   "scripts": {
     "lint": "eslint -c .eslintrc --ext .ts ./src",
+    "dev": "vite",
     "build": "tsc && vite build && electron-builder",
-    "watch": "tsc -w",
-    "start": "npm run build && electron ./dist/main.js",
-    "dev": "vite"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@spryker-oryx/presets": "^1.0.1",
