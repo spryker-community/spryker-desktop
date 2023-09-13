@@ -9,6 +9,7 @@ function createWindow() {
             preload: path.join(__dirname, "preload.js"),
         },
         width: 800,
+        icon: '/public/icon.png'
     });
 
     // and load the index.html of the app.
